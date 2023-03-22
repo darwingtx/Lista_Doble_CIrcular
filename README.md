@@ -1,8 +1,8 @@
 # Lista doblemente enlazada circular
 
 Integrantes:
-**Andrés Álvarez**
-**Darwin Castaño**
+- **Andrés Álvarez**
+- **Darwin Castaño**
 
 ## Requerimientos
 
