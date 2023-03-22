@@ -1,4 +1,5 @@
 package proyectolistacircular;
+
 import javax.swing.JOptionPane;
 
 public class Lista {
@@ -14,7 +15,6 @@ public class Lista {
 
     public void InsertarInicio(float d) {
         Nodo x = new Nodo(d);
-
         if (punta == null) {
             fin = x;
             fin.setLigaSig(fin);
@@ -29,9 +29,7 @@ public class Lista {
     }
 
     public void InsertarFinal(float d) {
-
         Nodo x = new Nodo(d);
-
         if (punta == null) {
             punta = x;
             fin = x;
@@ -44,66 +42,56 @@ public class Lista {
             punta.setLigaAnt(fin);
             fin.setLigaSig(punta);
         }
-
     }
 
-    public void InsertarOrdenadoAscendente(float d) {
+    public void InsertarOrdenado(float d, boolean cond) {
         Nodo x = new Nodo(d);
         Nodo p = punta, a;
-        if (punta == null) {
+
+        if (this.Vacio()) {
             punta = x;
             fin = x;
             punta.setLigaSig(fin);
             punta.setLigaAnt(fin);
             p = punta;
         } else {
-            do {
-                p = p.getLigaSig();
-            } while (p != punta && p.getDato() <= d);
+            if (cond) {
+                this.Ordenar(cond);
+                do {
+                    p = p.getLigaSig();
+                } while (p != punta && p.getDato() <= d);
 
-            if (p == punta && p.getDato() <= d) {
-                this.InsertarFinal(d);
-            } else if (punta.getDato() >= d) {
-                this.InsertarInicio(d);
-            } else if (p.getDato() >= d) {
-                a = p.getLigaAnt();
-                x.setLigaAnt(a);
-                x.setLigaSig(p);
-                a.setLigaSig(x);
-                p.setLigaAnt(x);
+                if (p == punta && p.getDato() <= d) {
+                    this.InsertarFinal(d);
+                } else if (punta.getDato() >= d) {
+                    this.InsertarInicio(d);
+                } else if (p.getDato() >= d) {
+                    a = p.getLigaAnt();
+                    x.setLigaAnt(a);
+                    x.setLigaSig(p);
+                    a.setLigaSig(x);
+                    p.setLigaAnt(x);
+                }
+            } else {
+                this.Ordenar(cond);
+                do {
+                    p = p.getLigaSig();
+                } while (p != punta && p.getDato() >= d);
 
+                if (p == punta && p.getDato() >= d) {
+                    this.InsertarFinal(d);
+                } else if (punta.getDato() <= d) {
+                    this.InsertarInicio(d);
+                } else if (p.getDato() <= d) {
+                    a = p.getLigaAnt();
+                    x.setLigaAnt(a);
+                    x.setLigaSig(p);
+                    a.setLigaSig(x);
+                    p.setLigaAnt(x);
+                }
             }
+
         }
-    }
-
-    public void InsertarOrdenadoDescendente(float d) {
-        Nodo x = new Nodo(d);
-        Nodo p = punta, a;
-        if (punta == null) {
-            punta = x;
-            fin = x;
-            punta.setLigaSig(fin);
-            punta.setLigaAnt(fin);
-            p = punta;
-        } else {
-            do {
-                p = p.getLigaSig();
-            } while (p != punta && p.getDato() >= d);
-
-            if (p == punta && p.getDato() >= d) {
-                this.InsertarFinal(d);
-            } else if (punta.getDato() <= d) {
-                this.InsertarInicio(d);
-            } else if (p.getDato() <= d) {
-                a = p.getLigaAnt();
-                x.setLigaAnt(a);
-                x.setLigaSig(p);
-                a.setLigaSig(x);
-                p.setLigaAnt(x);
-
-            }
-        }
-
     }
 
     public void Ordenar(boolean cond) {
@@ -135,12 +123,10 @@ public class Lista {
         if (!this.Vacio()) {
             String s = "";
             Nodo p = punta;
-
             do {
                 s = s + "|" + p.getDato() + "|" + "<--->";
                 p = p.getLigaSig();
             } while (p != punta);
-
             JOptionPane.showMessageDialog(null, s);
         } else {
             JOptionPane.showMessageDialog(null, "Lista vacia ");
@@ -155,7 +141,6 @@ public class Lista {
         if (this.Vacio()) {
             JOptionPane.showMessageDialog(null, "Lista vacia ");
         } else {
-
             op = Integer.parseInt(JOptionPane.showInputDialog("*** Menu de busqueda ***\n\n"
                     + "1. Eliminar\n"
                     + "2. Remplazar\n"));
@@ -202,8 +187,7 @@ public class Lista {
         }
     }
 
-    public void Eliminar(Nodo x) {// x llega como p y q llega como q
-        Nodo p = x;
+    public void Eliminar(Nodo p) {
         Nodo a, s;
         if (p != punta) {
             a = p.getLigaAnt();
@@ -252,22 +236,24 @@ public class Lista {
                 case 3:
                     opi = Integer.parseInt(JOptionPane.showInputDialog(null,
                             "****Seleccione el modo Ordenado de insercion****\n"
-                                    + "1.Ascendente.\n"
-                                    + "2.Descendente.\n"));
+                            + "1.Ascendente.\n"
+                            + "2.Descendente.\n"));
                     switch (opi) {
                         case 1:
                             Dato = Float.parseFloat(JOptionPane.showInputDialog("Insertar valor"));
-                            if (punta != null) {
-                                this.Ordenar(true);
-                            }
-                            this.InsertarOrdenadoAscendente(Dato);
+//                            if (!this.Vacio()) {
+//                                this.Ordenar(true);
+//                            }
+//                            this.InsertarOrdenadoAscendente(Dato);
+                              this.InsertarOrdenado(Dato, true);
                             break;
                         case 2:
                             Dato = Float.parseFloat(JOptionPane.showInputDialog("Insertar valor"));
-                            if (punta != null) {
-                                this.Ordenar(false);
-                            }
-                            this.InsertarOrdenadoDescendente(Dato);
+//                            if (!this.Vacio()) {
+//                                this.Ordenar(false);
+//                            }
+//                            this.InsertarOrdenadoDescendente(Dato);
+                            this.InsertarOrdenado(Dato, false);
                             break;
                         default:
                             JOptionPane.showInputDialog(null, "Valor invalido");
@@ -301,33 +287,35 @@ public class Lista {
 
                     opi = Integer.parseInt(JOptionPane.showInputDialog(null,
                             "****Seleccione la operacion a efectuar****\n"
-                                    + "1.Suma.\n"
-                                    + "2.Resta.\n"
-                                    + "3.Multiplicacion.\n"
-                                    + "4.Division.\n"));
-                    switch(a){
+                            + "1.Suma.\n"
+                            + "2.Resta.\n"
+                            + "3.Multiplicacion.\n"
+                            + "4.Division.\n"));
+                    switch (a) {
                         case 1:
-                            if(this.Vacio())
-                            {JOptionPane.showMessageDialog(null,"La lista l1 se encuentra vacia.");
-                            } if(l2.Vacio())
-                            {JOptionPane.showMessageDialog(null,"La lista l2 se encuentra vacia.");
+                            if (this.Vacio()) {
+                                JOptionPane.showMessageDialog(null, "La lista l1 se encuentra vacia.");
+                            }
+                            if (l2.Vacio()) {
+                                JOptionPane.showMessageDialog(null, "La lista l2 se encuentra vacia.");
                             }
                             break;
-                            case 2:
-                            if(this.Vacio())
-                            {JOptionPane.showMessageDialog(null,"La lista l2 se encuentra vacia.");
-                            }  if(l2.Vacio())
-                            {JOptionPane.showMessageDialog(null,"La lista l1 se encuentra vacia.");
+                        case 2:
+                            if (this.Vacio()) {
+                                JOptionPane.showMessageDialog(null, "La lista l2 se encuentra vacia.");
                             }
-                            
+                            if (l2.Vacio()) {
+                                JOptionPane.showMessageDialog(null, "La lista l1 se encuentra vacia.");
+                            }
+
                             break;
-                            default:
+                        default:
                             break;
                     }
                     switch (opi) {
                         case 1:
                             l3.punta = null;
-                            
+
                             this.Sumar(l2, l3);
                             l3.MostrarLista();
                             break;
@@ -347,7 +335,7 @@ public class Lista {
                             l3.MostrarLista();
                             break;
                         default:
-                            JOptionPane.showInputDialog(null, "Valor invalido");
+                            JOptionPane.showMessageDialog(null, "Opcion invalida");
                             break;
                     }
 
@@ -387,7 +375,7 @@ public class Lista {
         x = l2.punta;
 
         if (this.Vacio() && l2.Vacio()) {
-           
+
         } else {
 
             if (p == null) {
@@ -416,17 +404,15 @@ public class Lista {
                 } while (p != punta || x != l2.punta);
             }
 
-            
-           
-            }
         }
+    }
 
     public void Restar(Lista l2, Lista l3) {
         Nodo p, x;
         p = this.punta;
         x = l2.punta;
         if (this.Vacio() && l2.Vacio()) {
-            
+
         } else {
 
             if (p != null && x != null && p == punta && x == l2.punta) {
@@ -457,8 +443,6 @@ public class Lista {
                 } while (x != l2.punta);
             }
 
-           
-           
         }
     }
 
@@ -466,9 +450,8 @@ public class Lista {
         Nodo p, x;
         p = this.punta;
         x = l2.punta;
-         
-           
-         if (!l2.Vacio() || !this.Vacio()) {
+
+        if (!l2.Vacio() || !this.Vacio()) {
 
             if (p != null && x != null && p == punta && x == l2.punta) {
                 l3.InsertarFinal(p.getDato() * x.getDato());
@@ -480,26 +463,29 @@ public class Lista {
                         p = p.getLigaSig();
                         x = x.getLigaSig();
                     } else if (p != punta) {
-                        l3.InsertarFinal(0);
+                        l3.InsertarFinal(p.getDato());
                         p = p.getLigaSig();
-                    } else {
-                        l3.InsertarFinal(0);
+                    } else if (x != punta) {
+                        l3.InsertarFinal(x.getDato());
                         x = x.getLigaSig();
                     }
                 } while (p != punta || x != l2.punta);
 
             }
-            if (x == null || p == null) {
+            if (this.Vacio() || l2.Vacio()) {
                 do {
-                    l3.InsertarFinal(0);
-                    if (p == null) {
-                        x = x.getLigaSig();
-                    } else {
+
+                    if (!this.Vacio()) {
+                        l3.InsertarFinal(p.getDato());
                         p = p.getLigaSig();
                     }
-                } while (x != l2.punta || p != punta);
+                    if (!l2.Vacio()) {
+                        l3.InsertarFinal(x.getDato());
+                        x = x.getLigaSig();
+                    }
+                } while (p != punta || x != l2.punta);
             }
-           
+
         }
     }
 
@@ -507,13 +493,13 @@ public class Lista {
         Nodo p, x;
         p = this.punta;
         x = l2.punta;
-       
-         if (!this.Vacio() && !l2.Vacio()) {
+
+        if (!this.Vacio() && !l2.Vacio()) {
             if (p == punta && x == l2.punta) {
                 if (x.getDato() != 0) {
                     l3.InsertarFinal(p.getDato() / x.getDato());
                 } else if (x.getDato() == 0) {
-                    l3.InsertarFinal(11111111);
+                    l3.InsertarFinal(p.getDato());
                 }
                 p = p.getLigaSig();
                 x = x.getLigaSig();
@@ -522,12 +508,11 @@ public class Lista {
                 if (x.getDato() != 0) {
                     if (p != punta && x != l2.punta) {
                         l3.InsertarFinal(p.getDato() / x.getDato());
+                    } else if ((x == l2.punta || p == punta) || x.getDato() == 0) {
+                        l3.InsertarFinal(p.getDato());
                     }
-                 else if ((x == l2.punta || p == punta) || x.getDato() == 0) {
-                    l3.InsertarFinal(111111111);
                 }
-                }
-                if ( p != punta) {
+                if (p != punta) {
                     p = p.getLigaSig();
                 }
                 if (x != l2.punta) {
@@ -535,22 +520,21 @@ public class Lista {
                 }
 
             } while (x != l2.punta || p != punta);
-             }
-         else if (this.Vacio() || l2.Vacio())
-         {       
-        do{
-         l3.InsertarFinal(111111111);
-         if (!this.Vacio()) {
+        } else if (this.Vacio() || l2.Vacio()) {
+            do {
+
+                if (!this.Vacio()) {
+                    l3.InsertarFinal(p.getDato());
                     p = p.getLigaSig();
                 }
-          if (!l2.Vacio()) {
-                    x = x.getLigaSig();}
-         
-         }while(p!=punta || x!=l2.punta);
-         }
+                if (!l2.Vacio()) {
+                    l3.InsertarFinal(0);
+                    x = x.getLigaSig();
+                }
+            } while (p != punta || x != l2.punta);
+        }
     }
 
-    
     // retorna true si la lista esta vacia
     public boolean Vacio() {
         return punta == null ? true : false;
